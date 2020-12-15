@@ -1,6 +1,7 @@
 import React from 'react'
 // import { Typography } from '@material-ui/core'
 import { Table } from '../components/table/Table'
+import { dateTime } from '../helpers/date.helpers'
 import { HeadCell } from '../interfaces/components.interfaces'
 import { ID, User } from '../interfaces/entities.interfaces'
 
@@ -13,8 +14,8 @@ export const UsersView: React.FC = () => {
       password: '0000000000',
       phone: '+79507120993',
       role: 'User',
-      createdOn: new Date().toISOString(),
-      updatedOn: new Date().toISOString(),
+      createdOn: dateTime(new Date()),
+      updatedOn: dateTime(new Date(228).toJSON()),
     },
   ]
 
