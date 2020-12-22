@@ -1,13 +1,18 @@
 import React from 'react'
-import { CssBaseline } from '@material-ui/core'
+import { CssBaseline, ThemeProvider } from '@material-ui/core'
 import { BaseRoutes } from '../../routes/BaseRoutes'
 import { RootLayout } from '../layouts/RootLayout'
+import { useCustomTheme } from '../../styles/theme'
 
 export const App: React.FC = () => {
+  const theme = useCustomTheme()
+
   return (
-    <RootLayout>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
-      <BaseRoutes />
-    </RootLayout>
+      <RootLayout>
+        <BaseRoutes />
+      </RootLayout>
+    </ThemeProvider>
   )
 }
