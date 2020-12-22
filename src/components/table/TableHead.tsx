@@ -7,11 +7,10 @@ import {
   TableHead as MaterialTableHead,
   createStyles,
   makeStyles,
-  Theme,
 } from '@material-ui/core'
 import { TableHeadProps } from '../../interfaces/components.interfaces'
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     visuallyHidden: {
       border: 0,

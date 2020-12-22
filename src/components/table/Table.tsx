@@ -112,6 +112,10 @@ export function Table<T extends object>(props: TableProps<T>) {
         page={page}
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
+        labelRowsPerPage='Показать на странице'
+        labelDisplayedRows={({ from, to, count }) =>
+          `${from}-${to} из ${count}`
+        }
       />
     </Paper>
   )

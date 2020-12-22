@@ -11,6 +11,8 @@ import {
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
 import clsx from 'clsx'
+import { AddOutlined } from '@material-ui/icons'
+import { NavLink } from 'react-router-dom'
 
 interface TableToolbarProps {
   numSelected: number
@@ -69,12 +71,16 @@ export const TableToolbar: React.FC<TableToolbarProps> = props => {
           {title}
         </Typography>
       )}
-      {numSelected > 0 && (
+      {numSelected > 0 ? (
         <Tooltip title='Удалить'>
           <IconButton onClick={onRemove}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
+      ) : (
+        <IconButton component={NavLink} to='add'>
+          <AddOutlined color='inherit' />
+        </IconButton>
       )}
     </Toolbar>
   )
