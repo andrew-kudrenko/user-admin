@@ -7,7 +7,7 @@ export interface User {
   password: string
   name: string
   phone: string
-  role: string
-  createdOn: string
-  updatedOn: string
+  isAdmin: boolean
+  createdOn: Date | string
+  updatedOn: Date | string
 }

@@ -9,7 +9,7 @@ export const UsersView: React.FC = () => {
     { id: 'name', label: 'Имя' },
     { id: 'email', label: 'Email' },
     { id: 'phone', label: 'Телефон' },
-    { id: 'role', label: 'Роль' },
+    { id: 'isAdmin', label: 'Администратор' },
     { id: 'createdOn', label: 'Создан' },
     { id: 'updatedOn', label: 'Обновлён' },
   ]
@@ -21,10 +21,16 @@ export const UsersView: React.FC = () => {
       setUsers(users.filter(u => u.id !== id))
     })
   }
+  console.log(users)
+  const normalizedUsers: Array<ID<User>> = users.map(u => ({
+    ...u,
+    createdOn: new Date(u.createdOn).toLocaleString(),
+    updatedOn: new Date(u.createdOn).toLocaleString(),
+  }))
 
   return (
-    <Table
-      data={users}
+    <Table<User>
+      data={normalizedUsers}
       title='Пользователи'
       headCells={headCells}
       onRemove={onRemove}

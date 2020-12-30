@@ -3,4 +3,11 @@ export enum Theme {
   Dark,
 }
 
+export enum RunningStatus {
+  Idle,
+  Pending,
+  Success,
+  Error,
+}
+
 export type Nullable<T> = null | T

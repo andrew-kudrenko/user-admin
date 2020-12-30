@@ -1,5 +1,8 @@
+import { ButtonProps } from '@material-ui/core'
 import { Order } from '../helpers/table.helpers'
 import { ID, IDType } from './entities.interfaces'
+
+export type EditorMode = 'add' | 'edit'
 
 export interface HeadCell<T extends object> {
   id: keyof T
@@ -28,4 +31,23 @@ export interface TableProps<T extends object> {
   title: string
   headCells: Array<HeadCell<T>>
   onRemove: (id: Array<IDType>) => void
+}
+
+export interface EditorBottomToolbarProps {
+  mode: EditorMode
+  onSave: (() => Promise<void>) | (() => void)
+  onRemove: (() => Promise<void>) | (() => void)
+}
+
+export interface EditorLayoutProps extends EditorBottomToolbarProps {
+  title: string
+  valid: boolean
+  onSave: (() => Promise<void>) | (() => void)
+  onRemove: (() => Promise<void>) | (() => void)
+}
+
+export type EditorViewProps = Pick<EditorLayoutProps, 'title' | 'mode'>
+
+export interface StatefulButtonProps extends ButtonProps {
+  onClick: (() => Promise<void>) | (() => void)
 }

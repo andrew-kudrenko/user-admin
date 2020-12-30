@@ -22,9 +22,8 @@ const useStyles = makeStyles((theme: Theme) =>
     paper: {
       width: '100%',
       marginBottom: theme.spacing(2),
-    },
-    table: {
       minWidth: 450,
+      maxWidth: 1000,
     },
   })
 )
@@ -71,7 +70,7 @@ export function Table<T extends object>(props: TableProps<T>) {
         title={title}
       />
       <TableContainer>
-        <MaterialTable className={classes.table} size='medium'>
+        <MaterialTable size='medium'>
           <TableHead
             numSelected={selected.length}
             order={order}
