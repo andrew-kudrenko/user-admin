@@ -27,7 +27,11 @@ export const StatefulButton: React.FC<StatefulButtonProps> = props => {
   }
 
   return (
-    <Button {...props} onClick={onClickHandler} disabled={disabled}>
+    <Button
+      {...props}
+      onClick={onClickHandler}
+      disabled={props.disabled || disabled}
+    >
       {children}
     </Button>
   )

@@ -37,13 +37,12 @@ export interface EditorBottomToolbarProps {
   mode: EditorMode
   onSave: (() => Promise<void>) | (() => void)
   onRemove: (() => Promise<void>) | (() => void)
+  valid: boolean
+  id: IDType
 }
 
 export interface EditorLayoutProps extends EditorBottomToolbarProps {
   title: string
-  valid: boolean
-  onSave: (() => Promise<void>) | (() => void)
-  onRemove: (() => Promise<void>) | (() => void)
 }
 
 export type EditorViewProps = Pick<EditorLayoutProps, 'title' | 'mode'>

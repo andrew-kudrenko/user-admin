@@ -4,12 +4,12 @@ import { DateTimePicker } from '@material-ui/pickers'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { v4 as uuidv4 } from 'uuid'
-import { EditorLayout } from '../components/layouts/editor-layout/EditorLayout'
-import { messages } from '../helpers/form-validator-messages.helper'
-import { useLocalStorage } from '../hooks/local-storage.hook'
-import { ID, IDType, User } from '../interfaces/entities.interfaces'
-import { EditorViewProps } from '../interfaces/components.interfaces'
-import { useIDParam } from '../hooks/id-param.hook'
+import { EditorLayout } from '../../components/layouts/editor-layout/EditorLayout'
+import { messages } from '../../helpers/form-validator-messages.helper'
+import { useLocalStorage } from '../../hooks/local-storage.hook'
+import { ID, IDType, User } from '../../interfaces/entities.interfaces'
+import { EditorViewProps } from '../../interfaces/components.interfaces'
+import { useIDParam } from '../../hooks/id-param.hook'
 
 const validationSchema = yup.object({
   email: yup
@@ -35,14 +35,14 @@ const validationSchema = yup.object({
 export const UserFormView: React.FC<EditorViewProps> = props => {
   const [users, setUsers] = useLocalStorage<Array<ID<User>>>('data-users', [])
 
-  const id = useIDParam()
+  const id = useIDParam() ?? uuidv4()
 
   const onRemove = (id: IDType) => {
     setUsers(users.filter(u => u.id !== id))
   }
 
   const onAdd = (user: User) => {
-    setUsers([{ ...user, id: uuidv4() }, ...users])
+    setUsers([{ ...user, id }, ...users])
   }
 
   const onUpdate = (user: ID<User>) => {
@@ -58,6 +58,7 @@ export const UserFormView: React.FC<EditorViewProps> = props => {
   }
 
   const formik = useFormik({
+    validationSchema,
     initialValues: {
       email: '',
       name: '',
@@ -67,7 +68,6 @@ export const UserFormView: React.FC<EditorViewProps> = props => {
       createdOn: new Date(),
       updatedOn: new Date(),
     },
-    validationSchema,
     onSubmit: () => {},
   })
 
@@ -86,17 +86,27 @@ export const UserFormView: React.FC<EditorViewProps> = props => {
     // eslint-disable-next-line
   }, [users])
 
+  console.log(formik)
+
   return (
     <EditorLayout
       {...props}
-      valid={!formik.isValidating && formik.isValid}
+      id={id}
+      valid={
+        !formik.isValidating &&
+        formik.isValid &&
+        !!Object.keys(formik.touched).length
+      }
       onRemove={onRemove.bind(null, id)}
       onSave={
         props.mode === 'add'
           ? onAdd.bind(null, { ...formik.values })
           : onUpdate.bind(null, {
               ...formik.values,
-              id: users.find(u => u.id === id)!.id,
+              // Default value '' is for preventing destroy
+              // invoked by undefinded value after
+              // removing item from editor form
+              id: users.find(u => u.id === id)?.id || '',
             })
       }
     >
@@ -172,6 +182,7 @@ export const UserFormView: React.FC<EditorViewProps> = props => {
           control={
             <Checkbox
               id='isAdmin'
+              name='isAdmin'
               checked={formik.values.isAdmin}
               onChange={formik.handleChange}
               color='secondary'

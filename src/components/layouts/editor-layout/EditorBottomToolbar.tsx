@@ -26,17 +26,48 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 export const EditorBottomToolbar: React.FC<EditorBottomToolbarProps> = props => {
-  const { onSave, onRemove, mode } = props
+  const { onSave, onRemove, mode, valid, id } = props
 
   const classes = useStyles()
   const history = useHistory()
 
   const delay = 1500
 
-  const onDelayedSave = async () => {
+  const onSaveAndLeave = async () => {
     try {
       await onSave()
       setTimeout(history.goBack, delay)
+    } catch (e) {
+      throw e
+    }
+  }
+
+  const onSaveAndResumeEditing = async () => {
+    try {
+      await onSave()
+
+      const pathname = window.location.pathname
+        .split('/')
+        .map(s => (s === 'add' ? 'edit' : s))
+        .join('/')
+
+      history.replace(`${pathname}/${id}`)
+    } catch (e) {
+      throw e
+    }
+  }
+
+  const onRemoveAndLeave = async () => {
+    try {
+      await onRemove()
+
+      const pathFragments = window.location.pathname.split('/')
+      const indexOfActionFragment = pathFragments.findIndex(
+        f => f === 'edit' || f === 'add'
+      )
+      const pathname = pathFragments.slice(0, indexOfActionFragment).join('/')
+
+      history.replace(`${pathname}/`)
     } catch (e) {
       throw e
     }
@@ -47,7 +78,7 @@ export const EditorBottomToolbar: React.FC<EditorBottomToolbarProps> = props => 
       {mode === 'edit' && (
         <StatefulButton
           className={classes.error}
-          onClick={onRemove}
+          onClick={onRemoveAndLeave}
           variant='contained'
         >
           {'Удалить'}
@@ -55,15 +86,17 @@ export const EditorBottomToolbar: React.FC<EditorBottomToolbarProps> = props => 
       )}
       <StatefulButton
         className={`${classes.info} ${classes.middle}`}
-        onClick={onSave}
+        onClick={mode === 'add' ? onSaveAndResumeEditing : onSave}
         variant='outlined'
+        disabled={!valid}
       >
         {'Сохранить'}
       </StatefulButton>
       <StatefulButton
         className={classes.success}
-        onClick={onDelayedSave}
+        onClick={onSaveAndLeave}
         variant='contained'
+        disabled={!valid}
       >
         {'Сохранить и выйти'}
       </StatefulButton>

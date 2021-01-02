@@ -1,8 +1,8 @@
 import React from 'react'
-import { Table } from '../components/table/Table'
-import { useLocalStorage } from '../hooks/local-storage.hook'
-import { HeadCell } from '../interfaces/components.interfaces'
-import { ID, IDType, User } from '../interfaces/entities.interfaces'
+import { Table } from '../../components/table/Table'
+import { useLocalStorage } from '../../hooks/local-storage.hook'
+import { HeadCell } from '../../interfaces/components.interfaces'
+import { ID, IDType, User } from '../../interfaces/entities.interfaces'
 
 export const UsersView: React.FC = () => {
   const headCells: Array<HeadCell<User>> = [
@@ -17,9 +17,7 @@ export const UsersView: React.FC = () => {
   const [users, setUsers] = useLocalStorage<Array<ID<User>>>('data-users', [])
 
   const onRemove = (identifiers: Array<IDType>) => {
-    identifiers.forEach(id => {
-      setUsers(users.filter(u => u.id !== id))
-    })
+    setUsers(users.filter(u => !identifiers.includes(u.id)))
   }
   const normalizedUsers: Array<ID<User>> = users.map(u => ({
     ...u,

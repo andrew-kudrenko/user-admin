@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 export const EditorLayout: React.FC<EditorLayoutProps> = props => {
-  const { mode, title, valid, children, ...handlers } = props
+  const { title, children } = props
 
   const classes = useStyles()
 
@@ -23,7 +23,7 @@ export const EditorLayout: React.FC<EditorLayoutProps> = props => {
       <Grid container spacing={2} className={classes.form}>
         {children}
         <Grid item xs={12}>
-          <EditorBottomToolbar {...handlers} mode={mode} />
+          <EditorBottomToolbar {...props} />
         </Grid>
       </Grid>
     </>

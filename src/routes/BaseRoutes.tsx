@@ -1,7 +1,7 @@
 import React from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
-import { UserFormView } from '../views/UserFormView'
-import { UsersView } from '../views/UsersView'
+import { UserFormView } from '../views/users/UserFormView'
+import { UsersView } from '../views/users/UsersView'
 
 export const BaseRoutes: React.FC = () => (
   <Switch>
