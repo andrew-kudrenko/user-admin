@@ -21,11 +21,10 @@ export const UsersView: React.FC = () => {
       setUsers(users.filter(u => u.id !== id))
     })
   }
-  console.log(users)
   const normalizedUsers: Array<ID<User>> = users.map(u => ({
     ...u,
     createdOn: new Date(u.createdOn).toLocaleString(),
-    updatedOn: new Date(u.createdOn).toLocaleString(),
+    updatedOn: new Date(u.updatedOn).toLocaleString(),
   }))
 
   return (
