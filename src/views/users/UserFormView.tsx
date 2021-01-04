@@ -1,5 +1,12 @@
 import React, { useEffect } from 'react'
-import { Checkbox, FormControlLabel, Grid, TextField } from '@material-ui/core'
+import {
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from '@material-ui/core'
 import { DateTimePicker } from '@material-ui/pickers'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
@@ -7,9 +14,15 @@ import { v4 as uuidv4 } from 'uuid'
 import { EditorLayout } from '../../components/layouts/editor-layout/EditorLayout'
 import { messages } from '../../helpers/form-validator-messages.helper'
 import { useLocalStorage } from '../../hooks/local-storage.hook'
-import { ID, IDType, User } from '../../interfaces/entities.interfaces'
+import { ID, IDType, Role, User } from '../../interfaces/entities.interfaces'
 import { EditorViewProps } from '../../interfaces/components.interfaces'
 import { useIDParam } from '../../hooks/id-param.hook'
+
+const roles = new Map<Role, string>([
+  ['client', 'Клиент'],
+  ['partner', 'Партнер'],
+  ['admin', 'Администратор'],
+])
 
 const validationSchema = yup.object({
   email: yup
@@ -27,7 +40,7 @@ const validationSchema = yup.object({
     .required(messages.required),
 
   phone: yup.string().max(20, messages.lessThan(20)),
-  isAdmin: yup.boolean(),
+  role: yup.string().oneOf([...roles.keys()], messages.incorrect),
   createdOn: yup.date(),
   updatedOn: yup.date(),
 })
@@ -64,7 +77,7 @@ export const UserFormView: React.FC<EditorViewProps> = props => {
       name: '',
       password: '',
       phone: '',
-      isAdmin: false,
+      role: 'client',
       createdOn: new Date(),
       updatedOn: new Date(),
     },
@@ -92,19 +105,22 @@ export const UserFormView: React.FC<EditorViewProps> = props => {
       valid={
         !formik.isValidating &&
         formik.isValid &&
-        (!!Object.keys(formik.touched).length ||
-          formik.values.isAdmin !== formik.initialValues.isAdmin)
+        !!Object.keys(formik.touched).length
       }
       onRemove={onRemove.bind(null, id)}
       onSave={
         props.mode === 'add'
-          ? onAdd.bind(null, { ...formik.values })
+          ? onAdd.bind(null, {
+              ...formik.values,
+              role: formik.values.role as Role,
+            })
           : onUpdate.bind(null, {
               ...formik.values,
               // Default value '' is for preventing destroy
               // invoked by undefinded value after
               // removing item from editor form
               id: users.find(u => u.id === id)?.id || '',
+              role: formik.values.role as Role,
             })
       }
     >
@@ -153,6 +169,24 @@ export const UserFormView: React.FC<EditorViewProps> = props => {
           helperText={formik.touched.phone && formik.errors.phone}
         />
       </Grid>
+      <Grid item xs={12}>
+        <FormControl variant='outlined' fullWidth>
+          <InputLabel id='role-label'>{'Роль'}</InputLabel>
+          <Select
+            {...formik.getFieldProps('role')}
+            id='role'
+            labelId='role-label'
+            label='Роль'
+          >
+            {[...roles].map(([role, label]) => (
+              <MenuItem value={role} key={role}>
+                {label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+
       <Grid item xs={12} sm={6}>
         <DateTimePicker
           {...formik.getFieldProps('createdOn')}
@@ -175,21 +209,6 @@ export const UserFormView: React.FC<EditorViewProps> = props => {
           helperText={formik.touched.updatedOn && formik.errors.updatedOn}
         />
       </Grid>
-      <Grid item xs={12}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              id='isAdmin'
-              name='isAdmin'
-              checked={formik.values.isAdmin}
-              onChange={formik.handleChange}
-              color='secondary'
-            />
-          }
-          label='Администратор'
-        />
-      </Grid>
-      <Grid item xs={12}></Grid>
     </EditorLayout>
   )
 }
