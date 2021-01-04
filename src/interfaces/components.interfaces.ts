@@ -50,3 +50,14 @@ export type EditorViewProps = Pick<EditorLayoutProps, 'title' | 'mode'>
 export interface StatefulButtonProps extends ButtonProps {
   onClick: (() => Promise<void>) | (() => void)
 }
+
+export interface DrawerProps {
+  opened: Boolean
+  onToggle: () => void
+}
+
+export interface DrawerListOptionProps {
+  label: string
+  to: string
+  icon: React.ReactNode
+}

@@ -83,10 +83,7 @@ export const UserFormView: React.FC<EditorViewProps> = props => {
         })
       }
     }
-    // eslint-disable-next-line
   }, [users])
-
-  console.log(formik)
 
   return (
     <EditorLayout
@@ -95,7 +92,8 @@ export const UserFormView: React.FC<EditorViewProps> = props => {
       valid={
         !formik.isValidating &&
         formik.isValid &&
-        !!Object.keys(formik.touched).length
+        (!!Object.keys(formik.touched).length ||
+          formik.values.isAdmin !== formik.initialValues.isAdmin)
       }
       onRemove={onRemove.bind(null, id)}
       onSave={
