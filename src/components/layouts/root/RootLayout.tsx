@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import clsx from 'clsx'
 import { Container, Box, makeStyles, Theme } from '@material-ui/core'
-import { Navbar } from '../navigation/navbar/Navbar'
+import { Navbar } from '../../navigation/navbar/Navbar'
 
 const drawerWidth = 240
 const appBarHeight = 65
@@ -15,8 +15,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   main: {
     display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    justifyContent: 'space-evenly',
     paddingLeft: 72,
     transitionProperty: 'padding-left',
     transitionDuration: '.2s',

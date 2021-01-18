@@ -1,5 +1,5 @@
 import React from 'react'
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
+import { makeStyles, Theme } from '@material-ui/core/styles'
 import {
   TableRow as MaterialTableRow,
   TableCell,
@@ -17,16 +17,14 @@ import { useSelect } from '../../hooks/select.hook'
 import { TableRow } from './TableRow'
 import { HeadCell, TableProps } from '../../interfaces/components.interfaces'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      width: '100%',
-      marginBottom: theme.spacing(2),
-      minWidth: 450,
-      maxWidth: 1000,
-    },
-  })
-)
+const useStyles = makeStyles((theme: Theme) => ({
+  paper: {
+    width: '100%',
+    marginBottom: theme.spacing(2),
+    minWidth: 450,
+    maxWidth: 1000,
+  },
+}))
 
 export function Table<T extends object>(props: TableProps<T>) {
   const { data, title, headCells, onRemove } = props

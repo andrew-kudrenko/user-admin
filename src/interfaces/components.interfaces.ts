@@ -61,3 +61,11 @@ export interface DrawerListOptionProps {
   to: string
   icon: React.ReactNode
 }
+
+export interface FilterProps<T> {
+  onFilter: (predicate: (value: T) => boolean) => void
+}
+
+export interface FilterLayoutProps {
+  onClear: () => void
+}
