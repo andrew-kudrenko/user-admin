@@ -8,19 +8,23 @@ import {
   Typography,
   Tooltip,
   IconButton,
+  Popover,
 } from '@material-ui/core'
-import DeleteIcon from '@material-ui/icons/Delete'
+import {
+  AddOutlined as AddOutlinedIcon,
+  DeleteOutlined as DeleteIcon,
+  FilterListOutlined as FilterListIcon,
+} from '@material-ui/icons'
+import {
+  bindPopover,
+  bindTrigger,
+  usePopupState,
+} from 'material-ui-popup-state/hooks'
 import clsx from 'clsx'
-import { AddOutlined } from '@material-ui/icons'
 import { NavLink } from 'react-router-dom'
+import { TableToolbarProps } from '../../interfaces/components.interfaces'
 
-interface TableToolbarProps {
-  numSelected: number
-  title: string
-  onRemove: () => void
-}
-
-const useToolbarStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       paddingLeft: theme.spacing(2),
@@ -43,8 +47,13 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
 )
 
 export const TableToolbar: React.FC<TableToolbarProps> = props => {
-  const { title, numSelected, onRemove } = props
-  const classes = useToolbarStyles()
+  const { title, numSelected, onRemove, filter } = props
+
+  const classes = useStyles()
+  const popupState = usePopupState({
+    variant: 'popover',
+    popupId: 'filter-popup',
+  })
 
   return (
     <Toolbar
@@ -78,9 +87,20 @@ export const TableToolbar: React.FC<TableToolbarProps> = props => {
           </IconButton>
         </Tooltip>
       ) : (
-        <IconButton component={NavLink} to='add'>
-          <AddOutlined color='inherit' />
-        </IconButton>
+        <>
+          <IconButton component={NavLink} to='add'>
+            <AddOutlinedIcon color='inherit' />
+          </IconButton>
+          <IconButton {...bindTrigger(popupState)}>
+            <FilterListIcon color='inherit' />
+          </IconButton>
+          <Popover
+            {...bindPopover(popupState)}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+          >
+            {filter}
+          </Popover>
+        </>
       )}
     </Toolbar>
   )

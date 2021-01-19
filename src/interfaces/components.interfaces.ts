@@ -31,6 +31,14 @@ export interface TableProps<T extends object> {
   title: string
   headCells: Array<HeadCell<T>>
   onRemove: (id: Array<IDType>) => void
+  filter: JSX.Element
+}
+
+export interface TableToolbarProps {
+  numSelected: number
+  title: string
+  onRemove: () => void
+  filter: JSX.Element
 }
 
 export interface EditorBottomToolbarProps {
@@ -59,7 +67,7 @@ export interface DrawerProps {
 export interface DrawerListOptionProps {
   label: string
   to: string
-  icon: React.ReactNode
+  icon: JSX.Element
 }
 
 export interface FilterProps<T> {
@@ -68,4 +76,10 @@ export interface FilterProps<T> {
 
 export interface FilterLayoutProps {
   onClear: () => void
+}
+
+export interface BreadcrumpItemProps {
+  to: string
+  label: string
+  icon?: JSX.Element
 }

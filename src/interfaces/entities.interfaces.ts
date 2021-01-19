@@ -13,3 +13,5 @@ export interface User {
   createdOn: Date | string
   updatedOn: Date | string
 }
+
+export type UserFilterFields = Omit<User, 'createdOn' | 'updatedOn'>

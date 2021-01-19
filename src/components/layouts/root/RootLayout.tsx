@@ -15,7 +15,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   main: {
     display: 'flex',
-    justifyContent: 'space-evenly',
+    flexDirection: 'column',
+    alignItems: 'center',
     paddingLeft: 72,
     transitionProperty: 'padding-left',
     transitionDuration: '.2s',

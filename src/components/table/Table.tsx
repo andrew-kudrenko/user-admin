@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }))
 
 export function Table<T extends object>(props: TableProps<T>) {
-  const { data, title, headCells, onRemove } = props
+  const { data, title, headCells, onRemove, filter } = props
 
   const classes = useStyles()
   const [order, setOrder] = React.useState<Order>('asc')
@@ -66,6 +66,7 @@ export function Table<T extends object>(props: TableProps<T>) {
         numSelected={selected.length}
         onRemove={onRemove.bind(null, selected)}
         title={title}
+        filter={filter}
       />
       <TableContainer>
         <MaterialTable size='medium'>

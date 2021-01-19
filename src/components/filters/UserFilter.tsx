@@ -9,9 +9,15 @@ import {
   TextField,
 } from '@material-ui/core'
 import { FilterProps } from '../../interfaces/components.interfaces'
-import { ID, Role, User } from '../../interfaces/entities.interfaces'
+import {
+  ID,
+  Role,
+  User,
+  UserFilterFields,
+} from '../../interfaces/entities.interfaces'
 import { FilterLayout } from '../layouts/filter/FilterLayout'
 import { useFormik } from 'formik'
+import { useLocalStorage } from '../../hooks/local-storage.hook'
 
 const roles = new Map<Role, string>([
   ['client', 'Клиент'],
@@ -28,27 +34,54 @@ const validationSchema = yup.object({
   updatedOn: yup.date(),
 })
 
-export const UserFilter: React.FC<FilterProps<ID<User>>> = ({ onFilter }) => {
-  const initialValues = {
-    email: '',
-    name: '',
-    password: '',
-    phone: '',
-    role: '',
-    createdOn: new Date(),
-    updatedOn: new Date(),
-  }
+const initialValues = {
+  email: '',
+  name: '',
+  password: '',
+  phone: '',
+  role: '',
+  createdOn: new Date(),
+  updatedOn: new Date(),
+}
 
+export const UserFilter: React.FC<FilterProps<ID<User>>> = ({ onFilter }) => {
   const formik = useFormik({
     validationSchema,
     initialValues,
     onSubmit: () => {},
   })
+
+  const filterInitialValue: UserFilterFields = {
+    ...formik.values,
+    role: formik.values.role as Role,
+  }
+
+  const [storedFilter, setStoredFilter] = useLocalStorage<UserFilterFields>(
+    "users'-filter",
+    filterInitialValue
+  )
+
   const { email, role, phone, name } = formik.values
 
   const clearFilters = () => {
     formik.setValues(initialValues)
   }
+
+  useEffect(() => {
+    formik.setValues({
+      ...formik.values,
+      ...storedFilter,
+    })
+  }, [])
+
+  useEffect(() => {
+    const newValue = {
+      ...formik.values,
+      role: formik.values.role as Role,
+    }
+    console.log(newValue)
+    setStoredFilter(newValue)
+  }, [formik.values])
 
   useEffect(() => {
     onFilter(
@@ -59,7 +92,7 @@ export const UserFilter: React.FC<FilterProps<ID<User>>> = ({ onFilter }) => {
         (!role.length || item.role === role) &&
         (!phone.length || item.phone.includes(phone))
     )
-  }, [email, role, phone, name])
+  }, [email, role, phone, name, onFilter])
 
   return (
     <FilterLayout onClear={clearFilters}>

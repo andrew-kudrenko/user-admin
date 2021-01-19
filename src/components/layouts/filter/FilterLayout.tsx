@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Paper,
   Typography,
   Box,
   makeStyles,
@@ -17,7 +16,7 @@ const useStyles = makeStyles(({ spacing, palette }: Theme) =>
     root: {
       display: 'flex',
       flexDirection: 'column',
-      minWidth: 300,
+      maxWidth: 300,
       margin: spacing(0, 2, 2),
       padding: spacing(2),
     },
@@ -35,7 +34,7 @@ export const FilterLayout: React.FC<FilterLayoutProps> = props => {
   const classes = useStyles()
 
   return (
-    <Paper className={classes.root}>
+    <Box className={classes.root}>
       <Typography variant='h6' gutterBottom align='center'>
         {'Фильтры'}
       </Typography>
@@ -48,7 +47,12 @@ export const FilterLayout: React.FC<FilterLayoutProps> = props => {
         <Grid container spacing={2}>
           {children}
         </Grid>
-        <Box display='flex' justifyContent='flex-end' alignItems='center'>
+        <Box
+          display='flex'
+          justifyContent='flex-end'
+          alignItems='center'
+          marginTop={2}
+        >
           <Button
             onClick={onClear}
             className={clsx([classes.clear, classes.mr])}
@@ -57,6 +61,6 @@ export const FilterLayout: React.FC<FilterLayoutProps> = props => {
           </Button>
         </Box>
       </Box>
-    </Paper>
+    </Box>
   )
 }

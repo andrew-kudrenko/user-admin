@@ -37,14 +37,12 @@ export const UsersView: React.FC = () => {
   }))
 
   return (
-    <>
-      <Table<User>
-        data={normalizedUsers}
-        title='Пользователи'
-        headCells={headCells}
-        onRemove={onRemove}
-      />
-      <UserFilter onFilter={setFiltered} />
-    </>
+    <Table<User>
+      data={normalizedUsers}
+      title='Пользователи'
+      headCells={headCells}
+      onRemove={onRemove}
+      filter={<UserFilter onFilter={setFiltered} />}
+    />
   )
 }
